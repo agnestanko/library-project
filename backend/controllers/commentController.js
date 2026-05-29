@@ -42,8 +42,11 @@ const createComment = async (req, res) => {
 
     const populatedComment = await Comment.findById(comment._id).populate(
       "user",
-      "username email"
+      "username email",
     );
+
+    const io = req.app.get("io");
+    io.to(req.params.bookId).emit("newComment", populatedComment);
 
     res.status(201).json({
       message: "Comentariu adăugat cu succes",
