@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../server");
-const mongoose = require("mongoose");
 
 describe("Library API tests", () => {
   const testUser = {
@@ -58,8 +57,4 @@ describe("Library API tests", () => {
     expect(res.statusCode).toBe(201);
     expect(res.body.book.title).toBe("Test Book");
   });
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
 });

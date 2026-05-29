@@ -3,11 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const generateToken = (userId) => {
-  return jwt.sign(
-    { id: userId },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 const register = async (req, res) => {
@@ -96,7 +92,25 @@ const login = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+      user: {
+        id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Eroare la obținerea profilului",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  getProfile,
 };

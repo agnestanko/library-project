@@ -12,6 +12,8 @@ function BooksPage() {
   const [image, setImage] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [authorFilter, setAuthorFilter] = useState("");
+  const [sortOption, setSortOption] = useState("newest");
 
   const fetchBooks = async () => {
     try {
@@ -42,16 +44,34 @@ function BooksPage() {
       setDescription("");
       setImage("");
       setMessage("Book added successfully");
-
       fetchBooks();
     } catch (error) {
       setMessage(error.response?.data?.message || "Could not add book");
     }
   };
 
-  const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredBooks = books
+    .filter((book) =>
+      book.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((book) =>
+      book.author.toLowerCase().includes(authorFilter.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortOption === "newest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+
+      if (sortOption === "oldest") {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
+
+      if (sortOption === "title") {
+        return a.title.localeCompare(b.title);
+      }
+
+      return 0;
+    });
 
   return (
     <div className="p-6">
@@ -98,12 +118,31 @@ function BooksPage() {
 
       {message && <p className="mb-4 text-blue-600">{message}</p>}
 
-      <input
-        className="w-full border p-3 rounded mb-6"
-        placeholder="Search books..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="bg-white p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <input
+          className="border p-2 rounded"
+          placeholder="Search by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <input
+          className="border p-2 rounded"
+          placeholder="Filter by author..."
+          value={authorFilter}
+          onChange={(e) => setAuthorFilter(e.target.value)}
+        />
+
+        <select
+          className="border p-2 rounded"
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="title">Title A-Z</option>
+        </select>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {filteredBooks.map((book) => (
