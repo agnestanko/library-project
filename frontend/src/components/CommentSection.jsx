@@ -35,12 +35,22 @@ function CommentSection({ bookId }) {
   const handleAddComment = async (e) => {
     e.preventDefault();
 
+    if (!localStorage.getItem("token")) {
+      setMessage("Please log in before adding a comment.");
+      return;
+    }
+
+    if (!text.trim()) {
+      setMessage("Comment cannot be empty.");
+      return;
+    }
+
     try {
       await api.post(`/comments/book/${bookId}`, { text });
       setText("");
-      setMessage("");
+      setMessage("Comment added successfully.");
     } catch (error) {
-      setMessage(error.response?.data?.message || "Could not add comment");
+      setMessage(error.response?.data?.message || "Could not add comment.");
     }
   };
 
@@ -61,7 +71,15 @@ function CommentSection({ bookId }) {
         </button>
       </form>
 
-      {message && <p className="text-red-500 mb-4">{message}</p>}
+      {message && (
+        <p
+          className={`mb-4 ${
+            message.includes("successfully") ? "text-green-600" : "text-red-500"
+          }`}
+        >
+          {message}
+        </p>
+      )}
 
       <div className="space-y-3">
         {comments.map((comment) => (

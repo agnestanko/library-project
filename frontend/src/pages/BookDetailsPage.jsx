@@ -9,6 +9,7 @@ function BookDetailsPage() {
 
   const [book, setBook] = useState(null);
   const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -24,19 +25,24 @@ function BookDetailsPage() {
   }, [id]);
 
   const handleDelete = async () => {
-  const confirmed = window.confirm(
-    "Are you sure you want to delete this book?"
-  );
+    if (!localStorage.getItem("token")) {
+      setMessage("Please log in before deleting a book.");
+      return;
+    }
 
-  if (!confirmed) return;
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this book?",
+    );
 
-  try {
-    await api.delete(`/books/${id}`);
-    navigate("/");
-  } catch (error) {
-    setMessage(error.response?.data?.message || "Could not delete book");
-  }
-};
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/books/${id}`);
+      navigate("/");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Could not delete book.");
+    }
+  };
 
   if (message) {
     return <p className="p-6 text-red-500">{message}</p>;
@@ -64,21 +70,23 @@ function BookDetailsPage() {
         </p>
         <p className="mt-4">{book.description}</p>
 
-        <div className="mt-4 space-x-3">
-          <Link
-            to={`/books/${id}/edit`}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Edit
-          </Link>
+        {token && (
+          <div className="mt-4 space-x-3">
+            <Link
+              to={`/books/${id}/edit`}
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Edit
+            </Link>
 
-          <button
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-4 py-2 rounded"
-          >
-            Delete
-          </button>
-        </div>
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       <CommentSection bookId={id} />
