@@ -20,6 +20,9 @@ function App() {
         <Route path="/books/:id/edit" element={<EditBookPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
+      <footer className="text-center py-4 text-gray-500">
+        Online Library © 2026
+      </footer>
     </BrowserRouter>
   );
 }

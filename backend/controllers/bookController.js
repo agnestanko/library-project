@@ -39,7 +39,7 @@ const getBookById = async (req, res) => {
 
 const createBook = async (req, res) => {
   try {
-    const { title, author, description, image } = req.body;
+    const { title, author, description, image, category } = req.body;
 
     if (!title || !author || !description) {
       return res.status(400).json({
@@ -51,6 +51,7 @@ const createBook = async (req, res) => {
       title,
       author,
       description,
+      category,
       image,
       createdBy: req.user._id,
     });
@@ -69,7 +70,7 @@ const createBook = async (req, res) => {
 
 const updateBook = async (req, res) => {
   try {
-    const { title, author, description, image } = req.body;
+    const { title, author, description, image, category } = req.body;
 
     const book = await Book.findById(req.params.id);
 
@@ -88,6 +89,7 @@ const updateBook = async (req, res) => {
     book.title = title || book.title;
     book.author = author || book.author;
     book.description = description || book.description;
+    book.category = category || book.category;
     book.image = image !== undefined ? image : book.image;
 
     const updatedBook = await book.save();

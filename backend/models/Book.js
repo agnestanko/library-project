@@ -19,6 +19,12 @@ const bookSchema = new mongoose.Schema(
       required: true,
     },
 
+    category: {
+      type: String,
+      default: "General",
+      trim: true,
+    },
+
     image: {
       type: String,
       default: "",
@@ -32,7 +38,7 @@ const bookSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Book", bookSchema);

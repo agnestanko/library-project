@@ -15,6 +15,9 @@ function BooksPage() {
   const [authorFilter, setAuthorFilter] = useState("");
   const [sortOption, setSortOption] = useState("newest");
 
+  const [category, setCategory] = useState("General");
+  const [categoryFilter, setCategoryFilter] = useState("");
+
   const fetchBooks = async () => {
     try {
       const response = await api.get("/books");
@@ -36,12 +39,14 @@ function BooksPage() {
         title,
         author,
         description,
+        category,
         image,
       });
 
       setTitle("");
       setAuthor("");
       setDescription("");
+      setCategory("General");
       setImage("");
       setMessage("Book added successfully");
       fetchBooks();
@@ -52,10 +57,13 @@ function BooksPage() {
 
   const filteredBooks = books
     .filter((book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase())
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .filter((book) =>
-      book.author.toLowerCase().includes(authorFilter.toLowerCase())
+      book.author.toLowerCase().includes(authorFilter.toLowerCase()),
+    )
+    .filter((book) =>
+      categoryFilter ? book.category === categoryFilter : true,
     )
     .sort((a, b) => {
       if (sortOption === "newest") {
@@ -111,6 +119,19 @@ function BooksPage() {
           onChange={(e) => setImage(e.target.value)}
         />
 
+        <select
+          className="w-full border p-2 rounded"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="General">General</option>
+          <option value="Classic">Classic</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Programming">Programming</option>
+          <option value="History">History</option>
+        </select>
+
         <button className="bg-slate-800 text-white px-4 py-2 rounded">
           Add Book
         </button>
@@ -118,7 +139,7 @@ function BooksPage() {
 
       {message && <p className="mb-4 text-blue-600">{message}</p>}
 
-      <div className="bg-white p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <input
           className="border p-2 rounded"
           placeholder="Search by title..."
@@ -135,6 +156,20 @@ function BooksPage() {
 
         <select
           className="border p-2 rounded"
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="">All categories</option>
+          <option value="General">General</option>
+          <option value="Classic">Classic</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Programming">Programming</option>
+          <option value="History">History</option>
+        </select>
+
+        <select
+          className="border p-2 rounded"
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
         >
@@ -144,7 +179,7 @@ function BooksPage() {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {filteredBooks.map((book) => (
           <BookCard key={book._id} book={book} />
         ))}

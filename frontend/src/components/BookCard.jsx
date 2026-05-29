@@ -13,6 +13,9 @@ function BookCard({ book }) {
 
       <h2 className="text-xl font-bold">{book.title}</h2>
       <p className="text-gray-600">{book.author}</p>
+      <p className="text-sm text-slate-500 mt-1">
+        Category: {book.category || "General"}
+      </p>
       <p className="mt-2">{book.description}</p>
 
       <Link

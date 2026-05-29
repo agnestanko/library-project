@@ -24,13 +24,19 @@ function BookDetailsPage() {
   }, [id]);
 
   const handleDelete = async () => {
-    try {
-      await api.delete(`/books/${id}`);
-      navigate("/");
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Could not delete book");
-    }
-  };
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this book?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await api.delete(`/books/${id}`);
+    navigate("/");
+  } catch (error) {
+    setMessage(error.response?.data?.message || "Could not delete book");
+  }
+};
 
   if (message) {
     return <p className="p-6 text-red-500">{message}</p>;
@@ -53,6 +59,9 @@ function BookDetailsPage() {
 
         <h1 className="text-3xl font-bold">{book.title}</h1>
         <p className="text-gray-600 text-lg">{book.author}</p>
+        <p className="text-sm text-slate-500 mt-2">
+          Category: {book.category || "General"}
+        </p>
         <p className="mt-4">{book.description}</p>
 
         <div className="mt-4 space-x-3">
