@@ -38,7 +38,7 @@ function BookDetailsPage() {
 
     try {
       await api.delete(`/books/${id}`);
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
       setMessage(error.response?.data?.message || "Could not delete book.");
     }

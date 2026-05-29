@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const bookRoutes = require("./routes/bookRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/comments", commentRoutes);
+app.use(errorHandler);
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);

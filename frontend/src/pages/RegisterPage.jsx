@@ -20,7 +20,7 @@ function RegisterPage() {
       });
 
       localStorage.setItem("token", response.data.token);
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
       setMessage(error.response?.data?.message || "Register failed");
     }

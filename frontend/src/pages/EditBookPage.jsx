@@ -42,7 +42,7 @@ function EditBookPage() {
         image,
       });
 
-      navigate(`/books/${id}`);
+      navigate(-1);
     } catch (error) {
       setMessage(error.response?.data?.message || "Could not update book");
     }

@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const validator = require("validator");
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
@@ -13,6 +14,24 @@ const register = async (req, res) => {
     if (!username || !email || !password) {
       return res.status(400).json({
         message: "Toate câmpurile sunt obligatorii",
+      });
+    }
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({
+        message: "Email invalid",
+      });
+    }
+
+    if (username.length < 3) {
+      return res.status(400).json({
+        message: "Username must have at least 3 characters",
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must have at least 6 characters",
       });
     }
 
@@ -81,6 +100,7 @@ const login = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       token: generateToken(user._id),
     });
@@ -99,6 +119,7 @@ const getProfile = async (req, res) => {
         id: req.user._id,
         username: req.user.username,
         email: req.user.email,
+        role: req.user.role,
       },
     });
   } catch (error) {

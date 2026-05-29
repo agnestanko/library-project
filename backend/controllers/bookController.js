@@ -3,7 +3,7 @@ const Book = require("../models/Book");
 const getBooks = async (req, res) => {
   try {
     const books = await Book.find()
-      .populate("createdBy", "username email")
+      .populate("createdBy", "username email role")
       .sort({ createdAt: -1 });
 
     res.status(200).json(books);
@@ -19,7 +19,7 @@ const getBookById = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).populate(
       "createdBy",
-      "username email"
+      "username email role",
     );
 
     if (!book) {
@@ -47,12 +47,30 @@ const createBook = async (req, res) => {
       });
     }
 
+    if (title.length < 2) {
+      return res.status(400).json({
+        message: "Book title must have at least 2 characters",
+      });
+    }
+
+    if (author.length < 2) {
+      return res.status(400).json({
+        message: "Author must have at least 2 characters",
+      });
+    }
+
+    if (description.length < 10) {
+      return res.status(400).json({
+        message: "Description must have at least 10 characters",
+      });
+    }
+
     const book = await Book.create({
       title,
       author,
       description,
-      category,
       image,
+      category: category || "General",
       createdBy: req.user._id,
     });
 
@@ -74,13 +92,20 @@ const updateBook = async (req, res) => {
 
     const book = await Book.findById(req.params.id);
 
+console.log("USER ID:", req.user._id.toString());
+console.log("USER ROLE:", req.user.role);
+console.log("BOOK OWNER:", book.createdBy.toString());
+
     if (!book) {
       return res.status(404).json({
         message: "Cartea nu a fost găsită",
       });
     }
 
-    if (book.createdBy.toString() !== req.user._id.toString()) {
+    if (
+      book.createdBy.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
       return res.status(403).json({
         message: "Nu ai dreptul să modifici această carte",
       });
@@ -116,7 +141,10 @@ const deleteBook = async (req, res) => {
       });
     }
 
-    if (book.createdBy.toString() !== req.user._id.toString()) {
+    if (
+      book.createdBy.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
       return res.status(403).json({
         message: "Nu ai dreptul să ștergi această carte",
       });
