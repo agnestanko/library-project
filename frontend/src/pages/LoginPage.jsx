@@ -17,7 +17,7 @@ function LoginPage() {
       localStorage.setItem("token", response.data.token);
       navigate("/", { replace: true });
     } catch (error) {
-      setMessage(error.response?.data?.message || "Autentificare eșuată");
+      setMessage(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -33,12 +33,11 @@ function LoginPage() {
       background: "radial-gradient(ellipse at 60% 50%, rgba(201,168,76,0.04) 0%, transparent 60%)",
     }}>
       <div className="glass fade-up" style={{ width: "100%", maxWidth: 420, padding: "40px 36px" }}>
-        {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
-          <h1 style={{ margin: "0 0 6px", fontSize: 28 }}>Bun venit!</h1>
+          <h1 style={{ margin: "0 0 6px", fontSize: 28 }}>Welcome back!</h1>
           <p style={{ margin: 0, color: "var(--muted)", fontSize: 14 }}>
-            Conectează-te la contul tău
+            Sign in to your account
           </p>
         </div>
 
@@ -47,59 +46,32 @@ function LoginPage() {
             <label style={{ display: "block", fontSize: 12, color: "var(--muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>
               Email
             </label>
-            <input
-              className="fancy-input"
-              type="email"
-              placeholder="email@exemplu.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
+            <input className="fancy-input" type="email" placeholder="email@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
           </div>
-
           <div>
             <label style={{ display: "block", fontSize: 12, color: "var(--muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Parolă
+              Password
             </label>
-            <input
-              className="fancy-input"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
+            <input className="fancy-input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
           </div>
 
           {message && (
-            <div style={{
-              padding: "10px 16px",
-              borderRadius: 8,
-              background: "rgba(224,85,85,0.1)",
-              border: "1px solid rgba(224,85,85,0.3)",
-              color: "var(--danger)",
-              fontSize: 13,
-            }}>
+            <div style={{ padding: "10px 16px", borderRadius: 8, background: "rgba(224,85,85,0.1)", border: "1px solid rgba(224,85,85,0.3)", color: "var(--danger)", fontSize: 13 }}>
               {message}
             </div>
           )}
 
-          <button
-            type="submit"
-            className="btn-gold"
-            disabled={loading}
-            style={{ width: "100%", marginTop: 8, fontSize: 15, padding: "12px" }}
-          >
-            {loading ? "Se încarcă..." : "Intră în cont"}
+          <button type="submit" className="btn-gold" disabled={loading} style={{ width: "100%", marginTop: 8, fontSize: 15, padding: "12px" }}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
         <div className="divider" />
 
         <p style={{ textAlign: "center", margin: 0, fontSize: 14, color: "var(--muted)" }}>
-          Nu ai cont?{" "}
+          Don't have an account?{" "}
           <Link to="/register" style={{ color: "var(--gold-light)", textDecoration: "none", fontWeight: 500 }}>
-            Creează unul acum
+            Create one now
           </Link>
         </p>
       </div>

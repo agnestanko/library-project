@@ -15,7 +15,7 @@ function CommentSection({ bookId }) {
       const response = await api.get(`/comments/book/${bookId}`);
       setComments(response.data);
     } catch {
-      setMessage("Nu s-au putut încărca comentariile");
+      setMessage("Could not load comments");
     }
   };
 
@@ -32,23 +32,23 @@ function CommentSection({ bookId }) {
     e.preventDefault();
     if (!localStorage.getItem("token")) {
       setIsSuccess(false);
-      setMessage("Trebuie să fii logat pentru a comenta.");
+      setMessage("You must be logged in to comment.");
       return;
     }
     if (!text.trim()) {
       setIsSuccess(false);
-      setMessage("Comentariul nu poate fi gol.");
+      setMessage("Comment cannot be empty.");
       return;
     }
     try {
       await api.post(`/comments/book/${bookId}`, { text });
       setText("");
       setIsSuccess(true);
-      setMessage("Comentariu adăugat!");
+      setMessage("Comment added!");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       setIsSuccess(false);
-      setMessage(error.response?.data?.message || "Eroare la adăugarea comentariului.");
+      setMessage(error.response?.data?.message || "Could not add comment.");
     }
   };
 
@@ -59,7 +59,7 @@ function CommentSection({ bookId }) {
         fontSize: 22, marginBottom: 20,
         color: "var(--text)",
       }}>
-        Comentarii <span style={{ color: "var(--muted)", fontSize: 16 }}>({comments.length})</span>
+        Comments <span style={{ color: "var(--muted)", fontSize: 16 }}>({comments.length})</span>
       </h2>
 
       {/* Add comment form */}
@@ -67,7 +67,7 @@ function CommentSection({ bookId }) {
         <form onSubmit={handleAddComment}>
           <textarea
             className="fancy-input"
-            placeholder="Scrie un comentariu..."
+            placeholder="Write a comment..."
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={3}
@@ -75,7 +75,7 @@ function CommentSection({ bookId }) {
           />
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
             <button className="btn-gold" type="submit" style={{ fontSize: 14 }}>
-              Adaugă comentariu
+              Add comment
             </button>
             {message && (
               <span style={{
@@ -97,7 +97,7 @@ function CommentSection({ bookId }) {
             color: "var(--muted)", fontSize: 14,
             border: "1px dashed var(--border)", borderRadius: 12,
           }}>
-            Fii primul care comentează 💬
+            Be the first to comment 💬
           </div>
         ) : (
           comments.map((comment, i) => (
@@ -121,10 +121,10 @@ function CommentSection({ bookId }) {
                 </div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 500, color: "var(--gold-light)" }}>
-                    {comment.user?.username || "Utilizator necunoscut"}
+                    {comment.user?.username || "Unknown user"}
                   </div>
                   <div style={{ fontSize: 11, color: "var(--muted)" }}>
-                    {new Date(comment.createdAt).toLocaleDateString("ro-RO", {
+                    {new Date(comment.createdAt).toLocaleDateString("en-US", {
                       day: "numeric", month: "long", year: "numeric"
                     })}
                   </div>

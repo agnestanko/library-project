@@ -31,8 +31,8 @@ function App() {
         fontSize: 13,
         background: "var(--surface)",
       }}>
-        📚 <span style={{ color: "var(--gold)", fontFamily: "'Playfair Display', serif" }}>Biblioteca Online</span>
-        {" "}— Proiect TD © 2026
+        📚 <span style={{ color: "var(--gold)", fontFamily: "'Playfair Display', serif" }}>Online Library</span>
+        {" "}— TD Project © 2026
       </footer>
     </BrowserRouter>
   );

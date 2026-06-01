@@ -17,7 +17,7 @@ function ProfilePage() {
         setUser(profileRes.data.user);
         setBooks(booksRes.data);
       } catch {
-        setMessage("Trebuie să fii logat pentru a vedea profilul.");
+        setMessage("You must be logged in to view your profile.");
       }
     };
     fetchProfile();
@@ -28,7 +28,7 @@ function ProfilePage() {
       <div style={{ maxWidth: 600, margin: "60px auto", padding: "0 24px", textAlign: "center" }}>
         <p style={{ color: "var(--danger)" }}>{message}</p>
         <Link to="/login" className="btn-gold" style={{ marginTop: 16, display: "inline-block", textDecoration: "none" }}>
-          Mergi la Login
+          Go to Login
         </Link>
       </div>
     );
@@ -38,7 +38,7 @@ function ProfilePage() {
     return (
       <div style={{ maxWidth: 600, margin: "60px auto", padding: "0 24px", textAlign: "center", color: "var(--muted)" }}>
         <div style={{ fontSize: 32, marginBottom: 12 }}>⏳</div>
-        Se încarcă profilul...
+        Loading profile...
       </div>
     );
   }
@@ -47,10 +47,8 @@ function ProfilePage() {
 
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px" }}>
-      {/* Profile card */}
       <div className="glass fade-up" style={{ padding: "36px 40px", marginBottom: 28 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 28 }}>
-          {/* Avatar */}
           <div style={{
             width: 80, height: 80, borderRadius: "50%",
             background: "linear-gradient(135deg, var(--gold), #b8923f)",
@@ -69,18 +67,15 @@ function ProfilePage() {
 
         <div className="divider" />
 
-        {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, marginTop: 24 }}>
           {[
-            { label: "Cărți adăugate", value: myBooks.length, icon: "📚" },
-            { label: "Rol", value: user.role || "user", icon: "🎭" },
-            { label: "Status", value: "Activ", icon: "✅" },
+            { label: "Books added", value: myBooks.length, icon: "📚" },
+            { label: "Role",        value: user.role || "user", icon: "🎭" },
+            { label: "Status",      value: "Active", icon: "✅" },
           ].map(({ label, value, icon }) => (
             <div key={label} style={{
-              padding: "16px 20px",
-              borderRadius: 12,
-              background: "var(--surface2)",
-              border: "1px solid var(--border)",
+              padding: "16px 20px", borderRadius: 12,
+              background: "var(--surface2)", border: "1px solid var(--border)",
               textAlign: "center",
             }}>
               <div style={{ fontSize: 24, marginBottom: 8 }}>{icon}</div>
@@ -95,16 +90,15 @@ function ProfilePage() {
         </div>
       </div>
 
-      {/* My books */}
       <div className="glass fade-up-1" style={{ padding: "28px 32px" }}>
-        <h2 style={{ margin: "0 0 20px", fontSize: 22 }}>Cărțile mele</h2>
+        <h2 style={{ margin: "0 0 20px", fontSize: 22 }}>My Books</h2>
 
         {myBooks.length === 0 ? (
           <div style={{ padding: "32px 0", textAlign: "center", color: "var(--muted)" }}>
             <div style={{ fontSize: 32, marginBottom: 8 }}>📭</div>
-            <p style={{ margin: 0 }}>Nu ai adăugat nicio carte încă.</p>
+            <p style={{ margin: 0 }}>You haven't added any books yet.</p>
             <Link to="/" style={{ color: "var(--gold-light)", textDecoration: "none", fontSize: 14, display: "inline-block", marginTop: 12 }}>
-              Adaugă prima carte →
+              Add your first book →
             </Link>
           </div>
         ) : (

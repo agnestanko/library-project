@@ -116,7 +116,7 @@ function BookCard({ book }) {
             e.currentTarget.style.borderColor = "rgba(201,168,76,0.3)";
           }}
         >
-          Vezi detalii →
+          View details →
         </Link>
       </div>
     </div>

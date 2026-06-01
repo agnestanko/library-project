@@ -42,13 +42,13 @@ function Navbar() {
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
           }}>
-            Biblioteca
+            Library
           </span>
         </Link>
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <NavLink to="/" active={isActive("/")}>Cărți</NavLink>
+          <NavLink to="/" active={isActive("/")}>Books</NavLink>
 
           {!token ? (
             <>
@@ -59,7 +59,7 @@ function Navbar() {
             </>
           ) : (
             <>
-              <NavLink to="/profile" active={isActive("/profile")}>Profil</NavLink>
+              <NavLink to="/profile" active={isActive("/profile")}>Profile</NavLink>
               <button
                 onClick={logout}
                 className="btn-ghost"
