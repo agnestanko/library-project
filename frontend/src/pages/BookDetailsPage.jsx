@@ -17,6 +17,7 @@ function BookDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const token = localStorage.getItem("token");
@@ -25,7 +26,18 @@ function BookDetailsPage() {
     api.get(`/books/${id}`)
       .then(r => setBook(r.data))
       .catch(() => setMessage("Could not load book details"));
-  }, [id]);
+
+    if (token) {
+      api.get("/auth/profile")
+        .then(r => setCurrentUser(r.data.user))
+        .catch(() => {});
+    }
+  }, [id, token]);
+
+  const canEditOrDelete = book && currentUser && (
+    currentUser.role === "admin" ||
+    (book.createdBy?._id || book.createdBy) === currentUser.id
+  );
 
   const handleDelete = async () => {
     setShowConfirm(false);
@@ -98,7 +110,7 @@ function BookDetailsPage() {
             {book.description}
           </p>
 
-          {token && (
+          {canEditOrDelete && (
             <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
               <Link
                 to={`/books/${id}/edit`}
