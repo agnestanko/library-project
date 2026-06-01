@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import CommentSection from "../components/CommentSection";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 const CATEGORY_COLORS = {
   Fantasy:           { bg: "rgba(139,92,246,0.55)",  color: "#ede9fe", border: "rgba(139,92,246,0.8)" },
@@ -17,6 +18,7 @@ function BookDetailsPage() {
   const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [message, setMessage] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -26,8 +28,7 @@ function BookDetailsPage() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (!token) { setMessage("You must be logged in."); return; }
-    if (!window.confirm("Are you sure you want to delete this book?")) return;
+    setShowConfirm(false);
     try {
       await api.delete(`/books/${id}`);
       navigate("/", { replace: true });
@@ -106,7 +107,7 @@ function BookDetailsPage() {
               >
                 ✏️ Edit
               </Link>
-              <button className="btn-danger" onClick={handleDelete} style={{ fontSize: 14 }}>
+              <button className="btn-danger" onClick={() => setShowConfirm(true)} style={{ fontSize: 14 }}>
                 🗑 Delete
               </button>
             </div>
@@ -116,6 +117,13 @@ function BookDetailsPage() {
       </div>
 
       <CommentSection bookId={id} />
+
+      <ConfirmDialog
+        isOpen={showConfirm}
+        bookTitle={book?.title}
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }

@@ -98,7 +98,7 @@ console.log("BOOK OWNER:", book.createdBy.toString());
 
     if (!book) {
       return res.status(404).json({
-        message: "Cartea nu a fost găsită",
+        message: "The book was not found",
       });
     }
 
@@ -107,7 +107,7 @@ console.log("BOOK OWNER:", book.createdBy.toString());
       req.user.role !== "admin"
     ) {
       return res.status(403).json({
-        message: "Nu ai dreptul să modifici această carte",
+        message: "You don't have permission to modify this book.",
       });
     }
 
