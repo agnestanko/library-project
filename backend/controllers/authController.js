@@ -29,9 +29,13 @@ const register = async (req, res) => {
       });
     }
 
-    if (password.length < 6) {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
       return res.status(400).json({
-        message: "Password must have at least 6 characters",
+        message:
+          "Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",
       });
     }
 
